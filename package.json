@@ -1,0 +1,19 @@
+{
+  "name": "hackatren",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "aws-sdk": "^2.274.1",
+    "mysql2": "^1.5.3",
+    "request": "^2.87.0",
+    "sequelize": "^4.38.0",
+    "serverless-offline": "^3.25.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "MJ Valentin",
+  "license": "ISC"
+}
