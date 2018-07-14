@@ -8,6 +8,7 @@ module.exports = function (sequelize, DataTypes) {
     current_points: DataTypes.DOUBLE,
     total_points: DataTypes.DOUBLE,
     last_claimed: DataTypes.DATE,
+    has_signed_up: DataTypes.BOOLEAN,
   }, {
       underscored: true,
       classMethods: {

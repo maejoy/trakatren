@@ -50,3 +50,21 @@ functions:
       - http:
           path: register
           method: post
+  rewards: 
+    handler: api/claim_rewards.handler
+    events: 
+      - http:
+          path: rewards/claims
+          method: post
+  feedback: 
+    handler: api/send_feedback.handler
+    events: 
+      - http:
+          path: feedback/sendemail
+          method: post
+  login:
+    handler: api/login.handler
+    events: 
+      - http:
+          path: login
+          method: post
