@@ -36,8 +36,8 @@ try {
     if ($southbound < 14.5343371) {
       $southbound = 14.6575566;
     }
-    $northbound += 0.005;
-    $southbound -= 0.005;
+    $northbound += 0.0005;
+    $southbound -= 0.0005;
     sleep(1);
     print_r("NORTHBOUND: ".$northbound.",120.9915956\n");
     print_r("SOUTHBOUND: ".$southbound.",120.9915956\n\n");

@@ -15,9 +15,9 @@ module.exports.handler = (event, context, callback) => {
         callback(null, {
           statusCode: 200,
           body: {
-            points: userDetails.current_points,
-            open_app_last_claimed_date: userDetails.last_claimed,
-            has_signed_up: userDetails.has_signed_up,
+            points: 0,
+            open_app_last_claimed_date: null,
+            has_signed_up: false,
             rewards: userRewards,
           },
         });
