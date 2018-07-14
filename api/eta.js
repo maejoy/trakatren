@@ -27,14 +27,41 @@ module.exports.handler = (event, context, callback) => {
     db.Trains.findAll()
       .then((trains) => {
         let response = [];
+        let southLatitude = 0;
+        let northLatitude = 0;
+        let nearestTrains = [];
 
-        for (let i = 0, len = trains.length; i < len; i++) {
-          let distance = getDistanceFromLatLonInKm(station.latitude, station.longitude, trains[i].latitude, trains[i].longitude);
-          let time = humanizeDuration((distance / trains[i].speed) * 3600000, { units: ['h', 'm'], round: true }); //convert to seconds
-          response.push({
-            direction: trains[i].name,
-            ETA: time,
-          });
+        for (let i = 0; i < trains.length; i++) {
+          if (trains[i].name == 'southbound' && ((trains[i].latitude - station.latitude) > 0) && ((southLatitude == 0) || (trains[i].latitude < southLatitude))) {
+            southLatitude = trains[i].latitude;
+            nearestTrains[0] = {
+              latitude: trains[i].latitude,
+              longitude: trains[i].longitude,
+              speed: trains[i].speed,
+              name: trains[i].name
+            };
+          }
+          if (trains[i].name == 'northbound' && ((trains[i].latitude - station.latitude) < 0) && ((northLatitude == 0) || (trains[i].latitude > northLatitude))) {
+            northLatitude = trains[i].latitude;
+            nearestTrains[1] = {
+              latitude: trains[i].latitude,
+              longitude: trains[i].longitude,
+              speed: trains[i].speed,
+              name: trains[i].name
+            };
+          }
+        }
+
+        for (let i = 0; i < nearestTrains.length; i++) {
+          if (typeof nearestTrains[i] !== 'undefined') {
+            let distance = getDistanceFromLatLonInKm(station.latitude, station.longitude, nearestTrains[i].latitude, nearestTrains[i].longitude);
+            let time = humanizeDuration((distance / nearestTrains[i].speed) * 3600000, { units: ['h', 'm'], round: true }); //convert to seconds
+
+            response.push({
+              direction: nearestTrains[i].name,
+              ETA: time,
+            });
+          }
         }
 
         callback(null, {

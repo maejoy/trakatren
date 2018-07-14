@@ -19,5 +19,10 @@ module.exports.handler = (event, context, callback) => {
         rewards: null,
       },
     });
+  }).catch(() => {
+    callback(null, {
+      statusCode: 500,
+      body: 'Account already exists.',
+    });
   });
 };
