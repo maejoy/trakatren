@@ -1,18 +1,33 @@
 'use strict';
+var db = require('../database/models');
 
 module.exports.handler = (event, context, callback) => {
-  let speed = 200;
+  if (event.httpMethod == 'GET') {
+    const params = (event.queryStringParameters === '' || event.queryStringParameters == null) ? {} : event.queryStringParameters;
 
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }),
-  };
+    db.User.find({
+      where: {
+        email: params.email
+      },
+      attributes: ['points']
+    }).then((userPoints) => {
+      db.Rewards.find({
+        where: {
+          points: {
+            lte: userPoints.points
+          }
+        }
+      }).then((userRewards) => {
+        callback(null, {
+          statusCode: 200,
+          body: {
+            points: userPoints.points,
+            rewards: userRewards,
+          },
+        });
+      });
+    });
+  } else {
 
-  callback(null, response);
-
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // callback(null, { message: 'Go Serverless v1.0! Your function executed successfully!', event });
+  }
 };
