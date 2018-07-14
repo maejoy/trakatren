@@ -10,15 +10,18 @@ module.exports.handler = (event, context, callback) => {
     email: body.email,
     password: body.password,
   }).then(() => {
-    callback(null, {
-      statusCode: 200,
-      body: {
-        points: 0,
-        open_app_last_claimed_date: null,
-        has_signed_up: false,
-        rewards: null,
-      },
-    });
+    db.Rewards.findAll()
+      .then((userRewards) => {
+        callback(null, {
+          statusCode: 200,
+          body: {
+            points: userDetails.current_points,
+            open_app_last_claimed_date: userDetails.last_claimed,
+            has_signed_up: userDetails.has_signed_up,
+            rewards: userRewards,
+          },
+        });
+      });
   }).catch(() => {
     callback(null, {
       statusCode: 500,

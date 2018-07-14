@@ -12,8 +12,10 @@ module.exports.handler = (event, context, callback) => {
   let body = (event.body !== '') ? querystring.parse(event.body) : {};
 
   const emailDetails = {
-    body: body.feedback,
-    destination: ['maejoyvalentin@gmail.com'],
+    body: `
+    Sender Email Address: ${body.email}
+    Message: ${body.feedback}`,
+    destination: ['maejoyvalentin@gmail.com', 'trackatren@gmail.com'],
     subject: 'Track-a-Tren Feedback',
     source: 'trackatren@gmail.com',
   };

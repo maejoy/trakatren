@@ -20,26 +20,28 @@ module.exports.handler = (event, context, callback) => {
       email: email,
     }
   }).then((userDetails) => {
-    db.User.update({
+    var params = {
       total_points: userDetails.total_points + GAME[game],
       current_points: userDetails.current_points + GAME[game]
-    }, {
+    };
+    if (game == "SIGN_UP") {
+      params.has_signed_up = 1;
+    }
+    if (game == "OPEN_APP") {
+      params.last_claimed = new Date();
+    }
+    db.User.update(params, {
+      where: {
+        email: email
+      },
+    }).then(() => {
+      db.User.find({
         where: {
-          email: email
+          email: email,
         },
-      }).then(() => {
-        db.User.find({
-          where: {
-            email: email,
-          },
-        }).then((userDetails) => {
-          db.Rewards.findAll({
-            where: {
-              points: {
-                lte: userDetails.current_points
-              }
-            }
-          }).then((userRewards) => {
+      }).then((userDetails) => {
+        db.Rewards.findAll()
+          .then((userRewards) => {
             callback(null, {
               statusCode: 200,
               body: {
@@ -50,7 +52,7 @@ module.exports.handler = (event, context, callback) => {
               },
             });
           });
-        });
       });
+    });
   });
 };
